@@ -5,8 +5,8 @@
 define(["dao", "globals", "ui", "core/league", "lib/react", "util/viewHelpers", "jsx!views/components/LeagueLink", "jsx!views/components/NewWindowLink"], function (dao, g, ui, league, React, viewHelpers, LeagueLink, NewWindowLink) {
     "use strict";
 
-    var Message = React.createClass({
-        loadMessage: function () {
+    return React.createClass({
+        loadMessage: function (mid) {
             var message, readThisPageview, tx;
 
             tx = dao.tx("messages", "readwrite");
@@ -16,7 +16,7 @@ define(["dao", "globals", "ui", "core/league", "lib/react", "util/viewHelpers", 
             // If mid is null, this will open the *unread* message with the highest mid
             dao.messages.iterate({
                 ot: tx,
-                key: this.props.mid,
+                key: mid,
                 direction: "prev",
                 callback: function (messageLocal, shortCircuit) {
                     message = messageLocal;
@@ -49,9 +49,13 @@ define(["dao", "globals", "ui", "core/league", "lib/react", "util/viewHelpers", 
                 }
             }.bind(this));
         },
+
         componentDidMount: function () {
-            this.loadMessage();
+            var mid;
+            mid = this.props.params.mid ? parseInt(this.props.params.mid, 10) : null;
+            this.loadMessage(mid);
         },
+
         render: function () {
             if (this.state === null) { return <div />; }
 
@@ -66,21 +70,4 @@ define(["dao", "globals", "ui", "core/league", "lib/react", "util/viewHelpers", 
             );
         }
     });
-
-    function get(req) {
-        viewHelpers.beforeLeague(req).spread(function (updateEvents, cb) {
-            var mid;
-
-            mid = req.params.mid ? parseInt(req.params.mid, 10) : null;
-
-            React.render(
-              <Message mid={mid} />,
-              document.getElementById('league_content')
-            );
-        });
-    }
-
-    return {
-        get: get
-    };
 });

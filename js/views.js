@@ -2,7 +2,7 @@
  * @name views
  * @namespace Contains all the view modules.
  */
-define(["ui", "util/bbgmView", "util/viewHelpers", "views/account", "views/accountUpdateCard", "views/changes", "views/customizePlayer", "views/dashboard", "views/deleteLeague", "views/deleteOldData", "views/draft", "views/draftScouting", "views/draftSummary", "views/editTeamInfo", "views/eventLog", "views/exportLeague", "views/exportStats", "views/fantasyDraft", "views/freeAgents", "views/gameLog", "views/godMode", "views/hallOfFame", "views/history", "views/historyAll", "views/inbox", "views/leaders", "views/leagueDashboard", "views/leagueFinances", "views/live", "views/liveGame", "views/loginOrRegister", "views/lostPassword", "views/manual", "jsx!views/message", "views/multiTeamMode", "views/negotiation", "views/negotiationList", "views/newLeague", "views/newTeam", "views/player", "views/playerFeats", "views/playerRatingDists", "views/playerRatings", "views/playerShotLocations", "views/playerStatDists", "views/playerStats", "views/playoffs", "views/powerRankings", "views/resetPassword", "views/roster", "views/schedule", "views/standings", "views/teamFinances", "views/teamHistory", "views/teamShotLocations", "views/teamStatDists", "views/teamStats", "views/trade", "views/tradingBlock", "views/upcomingFreeAgents", "views/watchList"], function (ui, bbgmView, viewHelpers, account, accountUpdateCard, changes, customizePlayer, dashboard, deleteLeague, deleteOldData, draft, draftScouting, draftSummary, editTeamInfo, eventLog, exportLeague, exportStats, fantasyDraft, freeAgents, gameLog, godMode, hallOfFame, history, historyAll, inbox, leaders, leagueDashboard, leagueFinances, live, liveGame, loginOrRegister, lostPassword, manual, message, multiTeamMode, negotiation, negotiationList, newLeague, newTeam, player, playerFeats, playerRatingDists, playerRatings, playerShotLocations, playerStatDists, playerStats, playoffs, powerRankings, resetPassword, roster, schedule, standings, teamFinances, teamHistory, teamShotLocations, teamStatDists, teamStats, trade, tradingBlock, upcomingFreeAgents, watchList) {
+define(["ui", "lib/react", "util/bbgmView", "util/viewHelpers", "views/account", "views/accountUpdateCard", "views/changes", "views/customizePlayer", "views/dashboard", "views/deleteLeague", "views/deleteOldData", "views/draft", "views/draftScouting", "views/draftSummary", "views/editTeamInfo", "views/eventLog", "views/exportLeague", "views/exportStats", "views/fantasyDraft", "views/freeAgents", "views/gameLog", "views/godMode", "views/hallOfFame", "views/history", "views/historyAll", "views/inbox", "views/leaders", "views/leagueDashboard", "views/leagueFinances", "views/live", "views/liveGame", "views/loginOrRegister", "views/lostPassword", "views/manual", "jsx!views/Message", "views/multiTeamMode", "views/negotiation", "views/negotiationList", "views/newLeague", "views/newTeam", "views/player", "views/playerFeats", "views/playerRatingDists", "views/playerRatings", "views/playerShotLocations", "views/playerStatDists", "views/playerStats", "views/playoffs", "views/powerRankings", "views/resetPassword", "views/roster", "views/schedule", "views/standings", "views/teamFinances", "views/teamHistory", "views/teamShotLocations", "views/teamStatDists", "views/teamStats", "views/trade", "views/tradingBlock", "views/upcomingFreeAgents", "views/watchList"], function (ui, React, bbgmView, viewHelpers, account, accountUpdateCard, changes, customizePlayer, dashboard, deleteLeague, deleteOldData, draft, draftScouting, draftSummary, editTeamInfo, eventLog, exportLeague, exportStats, fantasyDraft, freeAgents, gameLog, godMode, hallOfFame, history, historyAll, inbox, leaders, leagueDashboard, leagueFinances, live, liveGame, loginOrRegister, lostPassword, manual, Message, multiTeamMode, negotiation, negotiationList, newLeague, newTeam, player, playerFeats, playerRatingDists, playerRatings, playerShotLocations, playerStatDists, playerStats, playoffs, powerRankings, resetPassword, roster, schedule, standings, teamFinances, teamHistory, teamShotLocations, teamStatDists, teamStats, trade, tradingBlock, upcomingFreeAgents, watchList) {
     "use strict";
 
     function staticPage(name, title) {
@@ -14,6 +14,23 @@ define(["ui", "util/bbgmView", "util/viewHelpers", "views/account", "views/accou
                 ui.title(title);
             }
         });
+    }
+
+    function leagueReact(Child) {
+        return {
+            get: function (req) {
+                viewHelpers.beforeLeague(req).spread(function (updateEvents, cb) {
+                    React.render(
+                      <Child params={req.params} />,
+                      document.getElementById('league_content')
+                    );
+
+                    if (cb.toString().length !== 14) {
+                        console.log('cb', cb.toString(), cb.toString().length);
+                    }
+                });
+            }
+        };
     }
 
     return {
@@ -29,9 +46,9 @@ define(["ui", "util/bbgmView", "util/viewHelpers", "views/account", "views/accou
         lostPassword: lostPassword,
         resetPassword: resetPassword,
 
+        message: leagueReact(Message),
         leagueDashboard: leagueDashboard,
         inbox: inbox,
-        message: message,
         standings: standings,
         playoffs: playoffs,
         leagueFinances: leagueFinances,
