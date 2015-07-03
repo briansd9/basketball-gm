@@ -21,6 +21,11 @@ Switch to react production version when ready
 CURRENT
 -------
 
+gamesim rewrite
+  game situation awareness (blowouts, close games, etc)
+  balance
+  minutes directly, not by +/-
+
 use positions for roster building and rotations
   free agents and trades matters....
   bump up penalties for unbalanced teams
