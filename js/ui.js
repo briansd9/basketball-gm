@@ -34,11 +34,14 @@ define(["dao", "globals", "templates", "lib/bluebird", "lib/davis", "lib/html2ca
         raw.updateEvents = updateEvents;
         raw.cb = cb;
 
+
         // This prevents the Create New League form from inappropriately refreshing after it is submitted
         if (refresh) {
             Davis.location.replace(new Davis.Request(url, raw));
+            g.emitter.emit('update', updateEvents, cb);
         } else if (inLeague || url === "/" || url.indexOf("/account") === 0) {
             Davis.location.assign(new Davis.Request(url, raw));
+            g.emitter.emit('update', updateEvents, cb);
         } else if (cb !== undefined) {
             cb();
         }

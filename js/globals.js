@@ -2,7 +2,7 @@
  * @name globals
  * @namespace Defines the constant portions of g.
  */
-define(["lib/knockout"], function (ko) {
+define(["lib/event_emitter", "lib/knockout"], function (EventEmitter, ko) {
     "use strict";
 
     // The way this works is... any "global" variables that need to be widely available are stored in g. Some of these are constants, like the ones defined below. Some others are dynamic, like the year of the current season, and are stored in the gameAttributes object store. The dynamic components of g are retrieved/updated/synced elsewhere. Yes, it's kind of confusing and arbitrary.
@@ -175,8 +175,10 @@ define(["lib/knockout"], function (ko) {
 
     g.stripePublishableKey = "pk_live_Dmo7Vs6uSaoYHrFngr4lM0sa";
 
+    g.emitter = new EventEmitter();
+
     // THIS MUST BE ACCURATE OR BAD STUFF WILL HAPPEN
-    g.notInDb = ["dbm", "dbl", "lid", "confs", "divs", "salaryCap", "minPayroll", "luxuryPayroll", "luxuryTax", "minContract", "maxContract", "minRosterSize", "PHASE", "PLAYER", "PHASE_TEXT", "gameSimWorkers", "vm", "enableLogging", "tld", "sport", "compositeWeights", "stripePublishableKey", "notInDb"];
+    g.notInDb = ["dbm", "dbl", "lid", "confs", "divs", "salaryCap", "minPayroll", "luxuryPayroll", "luxuryTax", "minContract", "maxContract", "minRosterSize", "PHASE", "PLAYER", "PHASE_TEXT", "gameSimWorkers", "vm", "enableLogging", "tld", "sport", "compositeWeights", "stripePublishableKey", "emitter", "notInDb"];
 
     return g;
 });

@@ -51,6 +51,9 @@ require.config({
         "lib/davis.google_analytics": {
             deps: ["lib/davis"]
         },
+        "lib/event_emitter": {
+            exports: "EventEmitter"
+        },
         "lib/faces": {
             exports: "faces"
         },
