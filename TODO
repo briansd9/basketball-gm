@@ -12,6 +12,9 @@ Convert a really simple page like message.js to React
   any other bbgmView functionality?
   can i get rid of helpers.leagueUrl and just use LeagueLink everywhere?
   can i get rid of callback passed through davis?
+    currently this is used to update UI before continuing with next step of a task (like simulating the next day's games). but is it really necessary to wait?
+  get rid of updateEvents passed through davis, instead use emitter
+    also don't use refresh for update, also use emitter directly
 
 r.js
   kind of works now. it puts RequireJS at the bottom of app.js, leading to an error. This can be corrected by manually looking for RequireJS 2.1.9 in app.js and moving that and everything below it to the top.

@@ -25,9 +25,12 @@ define(["ui", "lib/react", "util/bbgmView", "util/viewHelpers", "views/account",
                       document.getElementById('league_content')
                     );
 
-                    if (cb.toString().length !== 14) {
-                        console.log('cb', cb.toString(), cb.toString().length);
+                    // Scroll to top
+                    if (updateEvents.length === 0) {
+                        window.scrollTo(window.pageXOffset, 0);
                     }
+
+                    cb();
                 });
             }
         };
