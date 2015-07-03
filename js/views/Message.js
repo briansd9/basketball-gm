@@ -1,7 +1,3 @@
-/**
- * @name views.message
- * @namespace View a single message.
- */
 define(["dao", "globals", "ui", "core/league", "lib/react", "util/viewHelpers", "jsx!views/components/LeagueLink", "jsx!views/components/NewWindowLink"], function (dao, g, ui, league, React, viewHelpers, LeagueLink, NewWindowLink) {
     "use strict";
 
