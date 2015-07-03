@@ -2,10 +2,10 @@
  * @name views.message
  * @namespace View a single message.
  */
-define(["dao", "globals", "ui", "core/league", "lib/knockout", "lib/react", "util/viewHelpers"], function (dao, g, ui, league, ko, React, viewHelpers) {
+define(["dao", "globals", "ui", "core/league", "lib/react", "util/viewHelpers", "jsx!views/components/LeagueLink", "jsx!views/components/NewWindowLink"], function (dao, g, ui, league, React, viewHelpers, LeagueLink, NewWindowLink) {
     "use strict";
 
-    var CommentBox = React.createClass({
+    var Message = React.createClass({
         loadMessage: function () {
             var message, readThisPageview, tx;
 
@@ -44,23 +44,24 @@ define(["dao", "globals", "ui", "core/league", "lib/knockout", "lib/react", "uti
                 }
             }).then(function () {
                 if (this.isMounted()) {
+                    ui.title("Message From " + message.from);
                     this.setState({message: message});
                 }
             }.bind(this));
         },
-        componentDidMount: function() {
+        componentDidMount: function () {
             this.loadMessage();
         },
-        render: function() {
-            if (this.state === null) { return <div>PLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDER</div>; }
+        render: function () {
+            if (this.state === null) { return <div />; }
 
             return (
                 <div>
                     <h4 style={{marginTop: "23px"}}>
-                        From: <span>{this.state.message.from}</span>, <span>{this.state.message.year}</span> NW
+                        From: <span>{this.state.message.from}</span>, <span>{this.state.message.year}</span> <NewWindowLink />
                     </h4>
                     <span dangerouslySetInnerHTML={{__html: this.state.message.text}}></span>
-                    <p><a href="INBOX LINK">Return To Inbox</a></p>
+                    <p><LeagueLink parts={['inbox']}>Return To Inbox</LeagueLink></p>
                 </div>
             );
         }
@@ -73,22 +74,10 @@ define(["dao", "globals", "ui", "core/league", "lib/knockout", "lib/react", "uti
             mid = req.params.mid ? parseInt(req.params.mid, 10) : null;
 
             React.render(
-              <CommentBox mid={mid} />,
+              <Message mid={mid} />,
               document.getElementById('league_content')
             );
         });
-    }
-
-    function updateMessage(inputs, updateEvents, vm) {
-        if (updateEvents.indexOf("dbChange") >= 0 || updateEvents.indexOf("firstRun") >= 0 || vm.message.mid() !== inputs.mid) {
-            
-        }
-    }
-
-    function uiFirst(vm) {
-        ko.computed(function () {
-            ui.title("Message From " + vm.message.from());
-        }).extend({throttle: 1});
     }
 
     return {

@@ -11,6 +11,7 @@ Convert a really simple page like message.js to React
   scroll to top on link click
     where does this happen?
   any other bbgmView functionality?
+  can i get rid of helpers.leagueUrl and just use LeagueLink everywhere?
 
 r.js
   kind of works now. it puts RequireJS at the bottom of app.js, leading to an error. This can be corrected by manually looking for RequireJS 2.1.9 in app.js and moving that and everything below it to the top.
