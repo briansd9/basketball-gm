@@ -1,4 +1,4 @@
-define(["dao", "globals", "ui", "core/team", "lib/react", "util/helpers", "jsx!views/components/LeagueLink", "jsx!views/components/NewWindowLink"], function (dao, g, ui, team, React, helpers, LeagueLink, NewWindowLink) {
+define(["dao", "globals", "ui", "core/team", "lib/classnames", "lib/react", "util/helpers", "jsx!views/components/LeagueLink", "jsx!views/components/NewWindowLink"], function (dao, g, ui, team, classNames, React, helpers, LeagueLink, NewWindowLink) {
     "use strict";
 
     return React.createClass({
@@ -127,13 +127,12 @@ define(["dao", "globals", "ui", "core/team", "lib/react", "util/helpers", "jsx!v
                 <div>
                     {header}
 
-
                     {this.state.confs.map(function (c) {
                         return (
                             <div key={c.name}>
                                 <h2>{c.name}</h2>
                                 <div className="row">
-                                    <div className="col-sm-9" data-bind="foreach: divs">
+                                    <div className="col-sm-9">
                                         {c.divs.map(function (d) {
                                             return (
                                                 <div key={d.name} className="table-responsive">
@@ -144,13 +143,13 @@ define(["dao", "globals", "ui", "core/team", "lib/react", "util/helpers", "jsx!v
                                                         <tbody>
                                                             {d.teams.map(function (t) {
                                                                 return (
-                                                                    <tr key={t.tid} data-bind="css: {info: highlight}">
+                                                                    <tr key={t.tid} className={classNames({info: t.highlight})}>
                                                                         <td>
                                                                             <LeagueLink parts={['roster', t.abbrev, this.state.season]}>{t.region} {t.name}</LeagueLink> {t.confRank <= 8 ? '(' + t.confRank + ')' : ''}
                                                                         </td>
                                                                         <td>{t.won}</td>
                                                                         <td>{t.lost}</td>
-                                                                        <td>roundWinp: winp</td>
+                                                                        <td>{helpers.roundWinp(t.winp)}</td>
                                                                         <td>{t.gb}</td>
                                                                         <td>{t.wonHome}-{t.lostHome}</td>
                                                                         <td>{t.wonAway}-{t.lostAway}</td>
@@ -174,9 +173,9 @@ define(["dao", "globals", "ui", "core/team", "lib/react", "util/helpers", "jsx!v
                                                 <tr><th width="100%">Team</th><th align="right">GB</th></tr>
                                             </thead>
                                             <tbody>
-                                                {c.teams.map(function (t) {
+                                                {c.teams.map(function (t, i) {
                                                     return (
-                                                        <tr data-bind="css: {separator: $index() === 7, info: highlight}">
+                                                        <tr key={t.tid} className={classNames({separator: i === 7, info: t.highlight})}>
                                                             <td>
                                                                 {t.rank}. <LeagueLink parts={['roster', t.abbrev, this.state.season]}>{t.region}</LeagueLink>
                                                             </td>

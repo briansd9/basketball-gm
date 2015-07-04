@@ -882,6 +882,22 @@ define(["dao", "globals", "lib/knockout", "util/eventLog"], function (dao, g, ko
         return (arg > 0 ? "+" : "") + round(arg, d);
     }
 
+    function roundWinp(arg) {
+        var output;
+
+        output = parseFloat(arg).toFixed(3);
+
+        if (output[0] === "0") {
+            // Delete leading 0
+            output = output.slice(1, output.length);
+        } else {
+            // Delete trailing digit if no leading 0
+            output = output.slice(0, output.length - 1);
+        }
+
+        return output;
+    }
+
     return {
         validateAbbrev: validateAbbrev,
         getAbbrev: getAbbrev,
@@ -914,6 +930,7 @@ define(["dao", "globals", "lib/knockout", "util/eventLog"], function (dao, g, ko
         checkNaNs: checkNaNs,
         gameScore: gameScore,
         updateMultiTeam: updateMultiTeam,
-        plusMinus: plusMinus
+        plusMinus: plusMinus,
+        roundWinp: roundWinp
     };
 });

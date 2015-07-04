@@ -16,22 +16,12 @@ define(["globals", "lib/faces", "lib/knockout", "util/helpers"], function (g, fa
 
     ko.bindingHandlers.roundWinp = {
         update: function (element, valueAccessor) {
-            var arg, output;
+            var arg;
 
             arg = ko.unwrap(valueAccessor());
 
-            output = parseFloat(arg).toFixed(3);
-
-            if (output[0] === "0") {
-                // Delete leading 0
-                output = output.slice(1, output.length);
-            } else {
-                // Delete trailing digit if no leading 0
-                output = output.slice(0, output.length - 1);
-            }
-
             return ko.bindingHandlers.text.update(element, function () {
-                return output;
+                return helpers.roundWinp(arg);
             });
         }
     };
