@@ -20,6 +20,10 @@ Convert a really simple page like message.js to React
   get rid of updateEvents passed through davis, instead use emitter
     also don't use refresh for update, also use emitter directly
     4th parameter to realtimeupdate - what is it used for?
+  standings
+    commented stuff at bottom
+    data-bind stuff
+    winp
 
 r.js
   kind of works now. it puts RequireJS at the bottom of app.js, leading to an error. This can be corrected by manually looking for RequireJS 2.1.9 in app.js and moving that and everything below it to the top.

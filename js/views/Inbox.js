@@ -2,8 +2,8 @@ define(["dao", "globals", "ui", "lib/react", "jsx!views/components/LeagueLink", 
     "use strict";
 
     return React.createClass({
-        loadInbox: function () {
-            return dao.messages.getAll().then(function (messages) {
+        updateInbox: function () {
+            dao.messages.getAll().then(function (messages) {
                 var anyUnread, i;
 
                 messages.reverse();
@@ -27,16 +27,14 @@ define(["dao", "globals", "ui", "lib/react", "jsx!views/components/LeagueLink", 
         },
 
         componentDidMount: function () {
-            this.loadInbox();
+            this.updateInbox();
 
             g.emitter.on('update', this.listener);
         },
 
-        listener: function (updateEvents, cb) {
-            if (updateEvents.indexOf("dbChanged") >= 0) {
-                this.loadInbox().then(cb);
-            } else {
-                cb();
+        listener: function (updateEvents) {
+            if (updateEvents.indexOf("dbChange") >= 0) {
+                this.updateInbox();
             }
         },
 

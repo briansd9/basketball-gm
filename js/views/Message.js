@@ -2,7 +2,7 @@ define(["dao", "globals", "ui", "core/league", "lib/react", "jsx!views/component
     "use strict";
 
     return React.createClass({
-        loadMessage: function (mid) {
+        updateMessage: function (mid) {
             var message, readThisPageview, tx;
 
             tx = dao.tx("messages", "readwrite");
@@ -49,7 +49,7 @@ define(["dao", "globals", "ui", "core/league", "lib/react", "jsx!views/component
         componentDidMount: function () {
             var mid;
             mid = this.props.params.mid ? parseInt(this.props.params.mid, 10) : null;
-            this.loadMessage(mid);
+            this.updateMessage(mid);
         },
 
         render: function () {
