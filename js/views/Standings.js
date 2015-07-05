@@ -1,7 +1,31 @@
 define(["dao", "globals", "ui", "core/team", "lib/classnames", "lib/react", "util/helpers", "jsx!views/components/Dropdown", "jsx!views/components/LeagueLink", "jsx!views/components/NewWindowLink"], function (dao, g, ui, team, classNames, React, helpers, Dropdown, LeagueLink, NewWindowLink) {
     "use strict";
 
-    var DivisionStandings = React.createClass({
+    var ConferenceStandings, DivisionStandings, DivisionStandingsRow
+
+    DivisionStandingsRow = React.createClass({
+        render: function () {
+            return (
+                <tr className={classNames({info: this.props.t.highlight})}>
+                    <td>
+                        <LeagueLink parts={['roster', this.props.t.abbrev, this.props.season]}>{this.props.t.region} {this.props.t.name}</LeagueLink> {this.props.t.confRank <= 8 ? '(' + this.props.t.confRank + ')' : ''}
+                    </td>
+                    <td>{this.props.t.won}</td>
+                    <td>{this.props.t.lost}</td>
+                    <td>{helpers.roundWinp(this.props.t.winp)}</td>
+                    <td>{this.props.t.gb}</td>
+                    <td>{this.props.t.wonHome}-{this.props.t.lostHome}</td>
+                    <td>{this.props.t.wonAway}-{this.props.t.lostAway}</td>
+                    <td>{this.props.t.wonDiv}-{this.props.t.lostDiv}</td>
+                    <td>{this.props.t.wonConf}-{this.props.t.lostConf}</td>
+                    <td>{this.props.t.streak}</td>
+                    <td>{this.props.t.lastTen}</td>
+                </tr>
+            );
+        }
+    });
+
+    DivisionStandings = React.createClass({
         render: function () {
             return (
                 <div>
@@ -14,23 +38,7 @@ define(["dao", "globals", "ui", "core/team", "lib/classnames", "lib/react", "uti
                                     </thead>
                                     <tbody>
                                         {d.teams.map(function (t) {
-                                            return (
-                                                <tr key={t.tid} className={classNames({info: t.highlight})}>
-                                                    <td>
-                                                        <LeagueLink parts={['roster', t.abbrev, this.props.season]}>{t.region} {t.name}</LeagueLink> {t.confRank <= 8 ? '(' + t.confRank + ')' : ''}
-                                                    </td>
-                                                    <td>{t.won}</td>
-                                                    <td>{t.lost}</td>
-                                                    <td>{helpers.roundWinp(t.winp)}</td>
-                                                    <td>{t.gb}</td>
-                                                    <td>{t.wonHome}-{t.lostHome}</td>
-                                                    <td>{t.wonAway}-{t.lostAway}</td>
-                                                    <td>{t.wonDiv}-{t.lostDiv}</td>
-                                                    <td>{t.wonConf}-{t.lostConf}</td>
-                                                    <td>{t.streak}</td>
-                                                    <td>{t.lastTen}</td>
-                                                </tr>
-                                            );
+                                            return <DivisionStandingsRow key={t.tid} t={t} season={this.props.season} />;
                                         }.bind(this))}
                                     </tbody>
                                 </table>
@@ -42,7 +50,7 @@ define(["dao", "globals", "ui", "core/team", "lib/classnames", "lib/react", "uti
         }
     });
 
-    var ConferenceStandings = React.createClass({
+    ConferenceStandings = React.createClass({
         render: function () {
             return (
                 <table className="table table-striped table-bordered table-condensed">
