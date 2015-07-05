@@ -1,4 +1,4 @@
-define(["dao", "globals", "ui", "core/team", "lib/classnames", "lib/react", "util/helpers", "jsx!views/components/LeagueLink", "jsx!views/components/NewWindowLink"], function (dao, g, ui, team, classNames, React, helpers, LeagueLink, NewWindowLink) {
+define(["dao", "globals", "ui", "core/team", "lib/classnames", "lib/react", "util/helpers", "jsx!views/components/Dropdown", "jsx!views/components/LeagueLink", "jsx!views/components/NewWindowLink"], function (dao, g, ui, team, classNames, React, helpers, Dropdown, LeagueLink, NewWindowLink) {
     "use strict";
 
     var DivisionStandings = React.createClass({
@@ -140,10 +140,7 @@ define(["dao", "globals", "ui", "core/team", "lib/classnames", "lib/react", "uti
         },
 
         componentDidMount: function () {
-            var season;
-console.log('componentDidMount Standings');
-            season = helpers.validateSeason(this.props.params.season);
-            this.updateStandings(season);
+            this.updateStandings(helpers.validateSeason(this.props.params.season));
 
             g.emitter.on('update', this.listener);
         },
@@ -158,6 +155,12 @@ console.log('componentDidMount Standings');
             g.emitter.removeListener('update', this.listener);
         },
 
+        handleDropdownChange: function (i, value) {
+            if (i === 0) {
+                this.updateStandings(helpers.validateSeason(value));
+            }
+        },
+
         render: function () {
             var header;
 
@@ -167,6 +170,7 @@ console.log('componentDidMount Standings');
 
             return (
                 <div>
+                    <Dropdown fields={["seasons"]} values={[this.state.season]} onChange={this.handleDropdownChange} />
                     {header}
 
                     {this.state.confs.map(function (c) {

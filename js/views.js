@@ -21,8 +21,8 @@ define(["ui", "lib/react", "util/bbgmView", "util/viewHelpers", "views/account",
             get: function (req) {
                 viewHelpers.beforeLeague(req).spread(function (updateEvents, cb) {
                     React.render(
-                      <Child params={req.params} />,
-                      document.getElementById('league_content')
+                        <Child params={req.params} />,
+                        document.getElementById('league_content')
                     );
 
                     // Scroll to top
