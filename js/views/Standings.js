@@ -203,12 +203,3 @@ define(["dao", "globals", "ui", "core/team", "lib/classnames", "lib/react", "uti
         }
     });
 });
-
-
-/*    function uiFirst(vm) {
-        ui.tableClickableRows($(".standings-division"));
-    }
-
-    function uiEvery(updateEvents, vm) {
-        components.dropdown("standings-dropdown", ["seasons"], [vm.season()], updateEvents);
-    }*/

@@ -11,10 +11,6 @@ Convert a really simple page like message.js to React
   inbox
     refresh on dbChange or read message
     react emit multiple windows
-  title
-  updateEvents
-  scroll to top on link click
-    where does this happen?
   any other bbgmView functionality?
   can i get rid of helpers.leagueUrl and just use LeagueLink everywhere?
   can i get rid of callback passed through davis?

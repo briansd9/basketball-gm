@@ -34,18 +34,23 @@ define(["dao", "globals", "templates", "lib/bluebird", "lib/davis", "lib/html2ca
         raw.updateEvents = updateEvents;
         raw.cb = cb;
 
-        g.emitter.emit('update', updateEvents);
+        if ($("*[data-reactid]").length > 0) {
+            console.log("Updating for React");
+            g.emitter.emit('update', updateEvents);
+            if (cb !== undefined) {
+                cb();
+            }
+        } else {
+            console.log("Updating for non-React")
 
-        // This prevents the Create New League form from inappropriately refreshing after it is submitted
-/*        if (refresh) {
-            Davis.location.replace(new Davis.Request(url, raw));
-        } else if (inLeague || url === "/" || url.indexOf("/account") === 0) {
-            Davis.location.assign(new Davis.Request(url, raw));
-        } else if (cb !== undefined) {
-            cb();
-        }*/
-        if (cb !== undefined) {
-            cb();
+            // This prevents the Create New League form from inappropriately refreshing after it is submitted
+            if (refresh) {
+                Davis.location.replace(new Davis.Request(url, raw));
+            } else if (inLeague || url === "/" || url.indexOf("/account") === 0) {
+                Davis.location.assign(new Davis.Request(url, raw));
+            } else if (cb !== undefined) {
+                cb();
+            }
         }
     }
 
