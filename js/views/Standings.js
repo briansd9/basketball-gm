@@ -145,20 +145,18 @@ define(["dao", "globals", "ui", "core/team", "lib/classnames", "lib/react", "uti
             g.emitter.on('update', this.listener);
         },
 
+        componentWillUnmount: function () {
+            g.emitter.removeListener('update', this.listener);
+        },
+
         listener: function (updateEvents) {
             if (updateEvents.indexOf("dbChange") >= 0 || (this.state.season === g.season && updateEvents.indexOf("gameSim") >= 0)) {
                 this.updateStandings(this.state.season);
             }
         },
 
-        componentWillUnmount: function () {
-            g.emitter.removeListener('update', this.listener);
-        },
-
-        handleDropdownChange: function (i, value) {
-            if (i === 0) {
-                this.updateStandings(helpers.validateSeason(value));
-            }
+        handleDropdownChange: function (values) {
+            this.updateStandings(parseInt(values[0], 10));
         },
 
         render: function () {
@@ -171,6 +169,7 @@ define(["dao", "globals", "ui", "core/team", "lib/classnames", "lib/react", "uti
             return (
                 <div>
                     <Dropdown fields={["seasons"]} values={[this.state.season]} onChange={this.handleDropdownChange} />
+
                     {header}
 
                     {this.state.confs.map(function (c) {

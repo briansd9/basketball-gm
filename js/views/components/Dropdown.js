@@ -3,7 +3,7 @@ define(["lib/davis", "lib/react", "util/helpers"], function (Davis, React, helpe
 
     return React.createClass({
         handleChange: function (i, event) {
-            var args, leaguePage, url;
+            var leaguePage, url, values;
 
             console.log(event);
             console.log(event.target.value);
@@ -11,21 +11,19 @@ define(["lib/davis", "lib/react", "util/helpers"], function (Davis, React, helpe
             // Name of the page (like "standings"), with # and ? stuff removed
             leaguePage = document.URL.split("/", 6)[5].split("#")[0].split("?")[0];
 
-            args = [leaguePage];
-            this.props.values.forEach(function (value, j) {
+            values = this.props.values.map(function (value, j) {
                 if (i === j) {
-                    args.push(event.target.value);
-                } else {
-                    args.push(value);
+                    return event.target.value;
                 }
+                return value;
             });
 
-            url = helpers.leagueUrl(args);
+            url = helpers.leagueUrl([leaguePage].concat(values));
 
 // Somehow want to update URL without triggering re-render
             Davis.location.assign(new Davis.Request(url));
 
-            this.props.onChange(i, event.target.value);
+            this.props.onChange(values);
         },
 
         render: function () {
