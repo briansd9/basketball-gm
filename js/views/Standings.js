@@ -1,12 +1,14 @@
-define(["dao", "globals", "ui", "core/team", "lib/classnames", "lib/react", "util/helpers", "jsx!views/components/Dropdown", "jsx!views/components/LeagueLink", "jsx!views/components/NewWindowLink"], function (dao, g, ui, team, classNames, React, helpers, Dropdown, LeagueLink, NewWindowLink) {
+define(["dao", "globals", "ui", "core/team", "lib/classnames", "lib/react", "util/helpers", "jsx!views/components/Dropdown", "jsx!views/components/LeagueLink", "jsx!views/components/NewWindowLink", "jsx!views/mixins/ClickableRowMixin"], function (dao, g, ui, team, classNames, React, helpers, Dropdown, LeagueLink, NewWindowLink, ClickableRowMixin) {
     "use strict";
 
-    var ConferenceStandings, DivisionStandings, DivisionStandingsRow
+    var ConferenceStandings, DivisionStandings, DivisionStandingsRow;
 
     DivisionStandingsRow = React.createClass({
+        mixins: [ClickableRowMixin],
+
         render: function () {
             return (
-                <tr className={classNames({info: this.props.t.highlight})}>
+                <tr onClick={this.toggleClickableRow} className={classNames({info: this.props.t.highlight, warning: this.state.clicked})}>
                     <td>
                         <LeagueLink parts={['roster', this.props.t.abbrev, this.props.season]}>{this.props.t.region} {this.props.t.name}</LeagueLink> {this.props.t.confRank <= 8 ? '(' + this.props.t.confRank + ')' : ''}
                     </td>
@@ -32,7 +34,7 @@ define(["dao", "globals", "ui", "core/team", "lib/classnames", "lib/react", "uti
                     {this.props.divs.map(function (d) {
                         return (
                             <div key={d.name} className="table-responsive">
-                                <table className="table table-striped table-bordered table-condensed standings-division">
+                                <table className="table table-hover table-striped table-bordered table-condensed standings-division">
                                     <thead>
                                         <tr><th width="100%">{d.name}</th><th>W</th><th>L</th><th>Pct</th><th>GB</th><th>Home</th><th>Road</th><th>Div</th><th>Conf</th><th>Streak</th><th>L10</th></tr>
                                     </thead>

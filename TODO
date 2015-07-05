@@ -26,12 +26,6 @@ Convert a really simple page like message.js to React
   get rid of updateEvents passed through davis, instead use emitter
     also don't use refresh for update, also use emitter directly
     4th parameter to realtimeupdate - what is it used for?
-  standings
-    clickable rows
-      mixin https://facebook.github.io/react/docs/reusable-components.html#mixins for toggleRowHighlight
-      add onclick pointing at that function, probably break into individual row component first
-      how to actually add and remove css in onclick?
-        http://manofhustle.com/2015/01/19/dynamically-add-classes-react-classset/
   dropdown
     triggers double render (re-renders the previous season/team/whatever) - somehow need to trigger URL change without re-render
     can listen for updateEvents to check for newPhase
