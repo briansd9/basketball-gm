@@ -7,21 +7,22 @@ define(["dao", "globals", "ui", "core/team", "lib/classnames", "lib/react", "uti
         mixins: [ClickableRowMixin],
 
         render: function () {
+            var t = this.props.t;
             return (
-                <tr onClick={this.toggleClickableRow} className={classNames({info: this.props.t.highlight, warning: this.state.clicked})}>
+                <tr onClick={this.toggleClickableRow} className={classNames({info: t.tid === g.userTid, warning: this.state.clicked})}>
                     <td>
-                        <LeagueLink parts={['roster', this.props.t.abbrev, this.props.season]}>{this.props.t.region} {this.props.t.name}</LeagueLink> {this.props.t.confRank <= 8 ? '(' + this.props.t.confRank + ')' : ''}
+                        <LeagueLink parts={['roster', t.abbrev, this.props.season]}>{t.region} {t.name}</LeagueLink> {t.confRank <= 8 ? '(' + t.confRank + ')' : ''}
                     </td>
-                    <td>{this.props.t.won}</td>
-                    <td>{this.props.t.lost}</td>
-                    <td>{helpers.roundWinp(this.props.t.winp)}</td>
-                    <td>{this.props.t.gb}</td>
-                    <td>{this.props.t.wonHome}-{this.props.t.lostHome}</td>
-                    <td>{this.props.t.wonAway}-{this.props.t.lostAway}</td>
-                    <td>{this.props.t.wonDiv}-{this.props.t.lostDiv}</td>
-                    <td>{this.props.t.wonConf}-{this.props.t.lostConf}</td>
-                    <td>{this.props.t.streak}</td>
-                    <td>{this.props.t.lastTen}</td>
+                    <td>{t.won}</td>
+                    <td>{t.lost}</td>
+                    <td>{helpers.roundWinp(t.winp)}</td>
+                    <td>{t.gb}</td>
+                    <td>{t.wonHome}-{t.lostHome}</td>
+                    <td>{t.wonAway}-{t.lostAway}</td>
+                    <td>{t.wonDiv}-{t.lostDiv}</td>
+                    <td>{t.wonConf}-{t.lostConf}</td>
+                    <td>{t.streak}</td>
+                    <td>{t.lastTen}</td>
                 </tr>
             );
         }
@@ -62,7 +63,7 @@ define(["dao", "globals", "ui", "core/team", "lib/classnames", "lib/react", "uti
                     <tbody>
                         {this.props.teams.map(function (t, i) {
                             return (
-                                <tr key={t.tid} className={classNames({separator: i === 7, info: t.highlight})}>
+                                <tr key={t.tid} className={classNames({separator: i === 7, info: t.tid === g.userTid})}>
                                     <td>
                                         {t.rank}. <LeagueLink parts={['roster', t.abbrev, this.props.season]}>{t.region}</LeagueLink>
                                     </td>
@@ -101,11 +102,6 @@ define(["dao", "globals", "ui", "core/team", "lib/classnames", "lib/react", "uti
                             } else {
                                 confTeams[l].gb = helpers.gb(confTeams[0], confTeams[l]);
                             }
-                            if (confTeams[l].tid === g.userTid) {
-                                confTeams[l].highlight = true;
-                            } else {
-                                confTeams[l].highlight = false;
-                            }
                             l += 1;
                         }
                     }
@@ -125,11 +121,6 @@ define(["dao", "globals", "ui", "core/team", "lib/classnames", "lib/react", "uti
                                         divTeams[l].gb = helpers.gb(divTeams[0], divTeams[l]);
                                     }
                                     divTeams[l].confRank = confRanks[divTeams[l].tid];
-                                    if (divTeams[l].tid === g.userTid) {
-                                        divTeams[l].highlight = true;
-                                    } else {
-                                        divTeams[l].highlight = false;
-                                    }
                                     l += 1;
                                 }
                             }
