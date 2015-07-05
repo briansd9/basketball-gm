@@ -1,6 +1,71 @@
 define(["dao", "globals", "ui", "core/team", "lib/classnames", "lib/react", "util/helpers", "jsx!views/components/LeagueLink", "jsx!views/components/NewWindowLink"], function (dao, g, ui, team, classNames, React, helpers, LeagueLink, NewWindowLink) {
     "use strict";
 
+    var DivisionStandings = React.createClass({
+        render: function () {
+            return (
+                <div>
+                    {this.props.divs.map(function (d) {
+                        return (
+                            <div key={d.name} className="table-responsive">
+                                <table className="table table-striped table-bordered table-condensed standings-division">
+                                    <thead>
+                                        <tr><th width="100%">{d.name}</th><th>W</th><th>L</th><th>Pct</th><th>GB</th><th>Home</th><th>Road</th><th>Div</th><th>Conf</th><th>Streak</th><th>L10</th></tr>
+                                    </thead>
+                                    <tbody>
+                                        {d.teams.map(function (t) {
+                                            return (
+                                                <tr key={t.tid} className={classNames({info: t.highlight})}>
+                                                    <td>
+                                                        <LeagueLink parts={['roster', t.abbrev, this.props.season]}>{t.region} {t.name}</LeagueLink> {t.confRank <= 8 ? '(' + t.confRank + ')' : ''}
+                                                    </td>
+                                                    <td>{t.won}</td>
+                                                    <td>{t.lost}</td>
+                                                    <td>{helpers.roundWinp(t.winp)}</td>
+                                                    <td>{t.gb}</td>
+                                                    <td>{t.wonHome}-{t.lostHome}</td>
+                                                    <td>{t.wonAway}-{t.lostAway}</td>
+                                                    <td>{t.wonDiv}-{t.lostDiv}</td>
+                                                    <td>{t.wonConf}-{t.lostConf}</td>
+                                                    <td>{t.streak}</td>
+                                                    <td>{t.lastTen}</td>
+                                                </tr>
+                                            );
+                                        }.bind(this))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        );
+                    }.bind(this))}
+                </div>
+            );
+        }
+    });
+
+    var ConferenceStandings = React.createClass({
+        render: function () {
+            return (
+                <table className="table table-striped table-bordered table-condensed">
+                    <thead>
+                        <tr><th width="100%">Team</th><th align="right">GB</th></tr>
+                    </thead>
+                    <tbody>
+                        {this.props.teams.map(function (t, i) {
+                            return (
+                                <tr key={t.tid} className={classNames({separator: i === 7, info: t.highlight})}>
+                                    <td>
+                                        {t.rank}. <LeagueLink parts={['roster', t.abbrev, this.props.season]}>{t.region}</LeagueLink>
+                                    </td>
+                                    <td align="right">{t.gb}</td>
+                                </tr>
+                            );
+                        }.bind(this))}
+                    </tbody>
+                </table>
+            );
+        }
+    });
+
     return React.createClass({
         updateStandings: function (season) {
             team.filter({
@@ -74,32 +139,9 @@ define(["dao", "globals", "ui", "core/team", "lib/classnames", "lib/react", "uti
             }.bind(this));
         },
 
-        loadInbox: function () {
-            dao.messages.getAll().then(function (messages) {
-                var anyUnread, i;
-
-                messages.reverse();
-
-                anyUnread = false;
-                for (i = 0; i < messages.length; i++) {
-                    messages[i].text = messages[i].text.replace(/<p>/g, "").replace(/<\/p>/g, " "); // Needs to be regex otherwise it's cumbersome to do global replace
-                    if (!messages[i].read) {
-                        anyUnread = true;
-                    }
-                }
-
-                if (this.isMounted()) {
-                    ui.title("Inbox");
-                    this.setState({
-                        anyUnread: anyUnread,
-                        messages: messages
-                    });
-                }
-            }.bind(this));
-        },
-
         componentDidMount: function () {
             var season;
+console.log('componentDidMount Standings');
             season = helpers.validateSeason(this.props.params.season);
             this.updateStandings(season);
 
@@ -133,58 +175,11 @@ define(["dao", "globals", "ui", "core/team", "lib/classnames", "lib/react", "uti
                                 <h2>{c.name}</h2>
                                 <div className="row">
                                     <div className="col-sm-9">
-                                        {c.divs.map(function (d) {
-                                            return (
-                                                <div key={d.name} className="table-responsive">
-                                                    <table className="table table-striped table-bordered table-condensed standings-division">
-                                                        <thead>
-                                                            <tr><th width="100%">{d.name}</th><th>W</th><th>L</th><th>Pct</th><th>GB</th><th>Home</th><th>Road</th><th>Div</th><th>Conf</th><th>Streak</th><th>L10</th></tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            {d.teams.map(function (t) {
-                                                                return (
-                                                                    <tr key={t.tid} className={classNames({info: t.highlight})}>
-                                                                        <td>
-                                                                            <LeagueLink parts={['roster', t.abbrev, this.state.season]}>{t.region} {t.name}</LeagueLink> {t.confRank <= 8 ? '(' + t.confRank + ')' : ''}
-                                                                        </td>
-                                                                        <td>{t.won}</td>
-                                                                        <td>{t.lost}</td>
-                                                                        <td>{helpers.roundWinp(t.winp)}</td>
-                                                                        <td>{t.gb}</td>
-                                                                        <td>{t.wonHome}-{t.lostHome}</td>
-                                                                        <td>{t.wonAway}-{t.lostAway}</td>
-                                                                        <td>{t.wonDiv}-{t.lostDiv}</td>
-                                                                        <td>{t.wonConf}-{t.lostConf}</td>
-                                                                        <td>{t.streak}</td>
-                                                                        <td>{t.lastTen}</td>
-                                                                    </tr>
-                                                                );
-                                                            }.bind(this))}
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            );
-                                        }.bind(this))}
+                                        <DivisionStandings divs={c.divs} season={this.state.season} />
                                     </div>
 
                                     <div className="col-sm-3 hidden-xs">
-                                        <table className="table table-striped table-bordered table-condensed">
-                                            <thead>
-                                                <tr><th width="100%">Team</th><th align="right">GB</th></tr>
-                                            </thead>
-                                            <tbody>
-                                                {c.teams.map(function (t, i) {
-                                                    return (
-                                                        <tr key={t.tid} className={classNames({separator: i === 7, info: t.highlight})}>
-                                                            <td>
-                                                                {t.rank}. <LeagueLink parts={['roster', t.abbrev, this.state.season]}>{t.region}</LeagueLink>
-                                                            </td>
-                                                            <td align="right">{t.gb}</td>
-                                                        </tr>
-                                                    );
-                                                }.bind(this))}
-                                            </tbody>
-                                        </table>
+                                        <ConferenceStandings teams={c.teams} season={this.state.season} />
                                     </div>
                                 </div>
                             </div>

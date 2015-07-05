@@ -1,6 +1,12 @@
 REACT
 -----
 
+OPTIONS
+  1. gamesim triggers view update, but doesn't wait for it to finish before starting next day
+  2. keep current bbgmView stuff, but replace knockout with react
+  3. keep current bbgmView stuff, but replace knockout with something else
+  4. keep current bbgmView stuff, but use more modern knockout syntax (components, etc)
+
 Convert a really simple page like message.js to React
   inbox
     refresh on dbChange or read message
