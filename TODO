@@ -25,6 +25,9 @@ Convert a really simple page like message.js to React
   dropdown
     triggers double render (re-renders the previous season/team/whatever) - somehow need to trigger URL change without re-render
     can listen for updateEvents to check for newPhase
+  back button problem
+    change in props needs to somehow trigger re-fetching of data. maybe componentWillReceiveProps could re-trigger it, but there will still be a double render because it's async
+      need flux stores with synchronous data
 
 r.js
   kind of works now. it puts RequireJS at the bottom of app.js, leading to an error. This can be corrected by manually looking for RequireJS 2.1.9 in app.js and moving that and everything below it to the top.
